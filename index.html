@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateUrl='unPlug' b:templateVersion='1.5.5' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale.language' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+  <b:attr name='xmlns' value=''/>
+  <b:attr name='xmlns:b' value=''/>
+  <b:attr name='xmlns:expr' value=''/>
+  <b:attr name='xmlns:data' value=''/>
+  <b:attr cond='data:blog.locale.language == &quot;in&quot;' name='lang' value='id'/>
+    
+  <!--[ <head> open ]-->
+  <head>
+  
+  <b:comment>Title that appears in search results</b:comment>
+  <b:if cond='data:view.isMultipleItems'>
+    <b:if cond='data:view.isHomepage'>
+      <!--[ Homepage title ]-->
+      <title><data:blog.title/></title>
+      
+      <b:elseif cond='data:view.search.query'/>
+      <!--[ Search title ]-->
+      <title><data:messages.search/>: <data:view.search.query/></title>
+      
+      <b:elseif cond='data:view.search.label'/>
+      <!--[ Label title ]-->
+      <title><data:blog.pageName/> - <data:blog.title/></title>
+      
+      <b:elseif cond='data:view.isArchive'/>
+      <!--[ Archive title ]-->
+      <title>Blog archive in: <data:blog.pageName/></title>
+      
+      <b:else/>
+      <title>Blog - <data:blog.title/></title>
+    </b:if>
+    
+    <b:elseif cond='data:view.isError'/>
+    <!--[ Error title ]-->
+    <title>Error 404: Not Found!</title>
+    
+    <b:else/>
+    <!--[ SingleItem title ]-->
+    <b:comment>It will omit the blog title when the character count exceeds 57</b:comment>
+    <b:if cond='(data:blog.pageName.length + data:blog.title.length) gt 57'>
+      <title><data:blog.pageName/></title>
+      <b:else/>
+      <title><data:blog.pageName/> - <data:blog.title/></title>
+    </b:if>
+  </b:if>
+
+  <!--[ Meta for browser ]-->
+  <meta charset='UTF-8'/>
+  <meta content='width=device-width, initial-scale=1.0' name='viewport'/>
+  <meta content='max-image-preview:large' name='robots'/>
+
+  <!-- Link canonical -->
+  <link expr:href='data:blog.url.canonical' rel='canonical'/>
+
+  <b:if cond='!data:view.isError'>
+    <!--[ Description and keyword ]-->
+    <b:if cond='data:blog.metaDescription'>
+      <meta expr:content='data:blog.metaDescription.escaped' name='description'/>
+      <b:elseif cond='data:view.isSingleItem'/>
+      <meta expr:content='data:post.snippet.escaped snippet { length: 147, links: false, linebreaks: false, ellipsis: false }' name='description'/>
+      <b:else/>
+      <meta expr:content='data:blog.pageName.escaped ? data:blog.pageName.escaped : data:blog.title.escaped' name='description'/>
+    </b:if>
+    <meta expr:content='data:blog.pageName.escaped ? data:blog.pageName.escaped : data:blog.title.escaped + &quot;, keyword_1, keyword_2, keyword_3 &quot;' name='keywords'/>
+    <b:tag cond='data:view.isPost' expr:href='resizeImage(data:blog.postImageUrl, 0)' name='link' rel='image_src'/>
+  
+    <!--[ Generator and RRS ]-->
+    <meta content='blogger' name='generator'/>
+    <link expr:href='data:blog.homepageUrl.canonical + &quot;feeds/posts/default&quot;' expr:title='data:blog.title + &quot; - Atom&quot;' rel='alternate' type='application/atom+xml'/>
+    <link expr:href='data:blog.homepageUrl.canonical + &quot;feeds/posts/default?alt=rss&quot;' expr:title='data:blog.title + &quot; - Feed&quot;' rel='alternate' type='application/rss+xml'/>
+    <link expr:href='data:blog.homepageUrl.canonical + &quot;feeds/comments/default?alt=rss&quot;' expr:title='data:blog.title + &quot; - Comments Feed&quot;' rel='alternate' type='application/rss+xml'/>
+  
+    <!--[ Theme color ]-->
+    <meta expr:content='data:skin.vars.themeColor' name='theme-color'/>
+    <meta expr:content='data:skin.vars.themeColor' name='msapplication-navbutton-color'/>
+    <meta expr:content='data:skin.vars.themeColor' name='apple-mobile-web-app-status-bar-style'/>
+    <meta expr:content='true' name='apple-mobile-web-app-capable'/>
+  
+    <!--[ Favicon ]-->
+    <link expr:href='data:blog.blogspotFaviconUrl' rel='apple-touch-icon' sizes='152x152'/>
+    <link expr:href='data:blog.blogspotFaviconUrl' rel='icon' type='image/x-icon'/>
+    <link expr:href='data:blog.blogspotFaviconUrl' rel='shortcut icon' type='image/x-icon'/>
+    
+    <!--[ Open graph and Twitter card ]-->
+    <meta content='summary_large_image' name='twitter:card'/>
+    <meta expr:content='data:blog.pageName.escaped ? data:blog.pageName.escaped : data:blog.title.escaped' property='og:title'/>
+    <meta expr:content='data:blog.pageName.escaped ? data:blog.pageName.escaped : data:blog.title.escaped' name='twitter:title'/>
+    <meta expr:content='data:blog.url.canonical' property='og:url'/>
+    <meta expr:content='data:blog.url.canonical' name='twitter:url'/>
+    <meta expr:content='data:blog.title.escaped' property='og:site_name'/>
+    <b:if cond='data:view.isMultipleItems'>
+      <meta content='website' property='og:type'/>
+      <b:if cond='data:blog.metaDescription'>
+        <meta expr:content='data:blog.metaDescription.escaped' property='og:description'/>
+        <meta expr:content='data:blog.metaDescription.escaped' name='twitter:description'/>
+        <b:else/>
+        <meta expr:content='data:blog.pageName.escaped ? data:blog.pageName.escaped : data:blog.title.escaped' property='og:description'/>
+        <meta expr:content='data:blog.pageName.escaped ? data:blog.pageName.escaped : data:blog.title.escaped' name='twitter:description'/>
+      </b:if>
+      <b:else/>
+      <meta content='article' property='og:type'/>
+      <b:if cond='data:blog.metaDescription'>
+        <meta expr:content='data:blog.metaDescription.escaped' property='og:description'/>
+        <meta expr:content='data:blog.metaDescription.escaped' name='twitter:description'/>
+        <b:else/>
+        <meta expr:content='data:post.snippet.escaped snippet { length: 147, links: false, linebreaks: false, ellipsis: false }' property='og:description'/>
+        <meta expr:content='data:post.snippet.escaped snippet { length: 147, links: false, linebreaks: false, ellipsis: false }' name='twitter:description'/>
+      </b:if>
+    </b:if>
+    <b:if cond='data:blog.postImageUrl'>
+      <meta expr:content='resizeImage(data:blog.postImageUrl, 0)' property='og:image'/>
+      <meta expr:content='resizeImage(data:blog.postImageUrl, 0)' name='twitter:image:src'/>
+      <b:else/>
+      
+      <b:comment>Replace Add_your_image_url_here with your image url</b:comment>
+      <b:with value='{url: &quot;Add_your_image_url_here&quot;}' var='thumb'>
+        <meta expr:content='data:thumb.url' property='og:image'/>
+        <meta expr:content='data:thumb.url' name='twitter:image:src'/>
+      </b:with>
+    </b:if>
+   </b:if>
+    
+    <!--[ Inline CSS Link ]-->
+    <link href='https://zaap.bio/assets/page/css/app.css' media='screen' rel='stylesheet'/>
+   
+    <link href='https://zaap.bio/assets/page/css/bootstrap.min.css' media='screen' rel='stylesheet'/>
+    
+    <link href='https://zaap.bio/assets/page/css/custom.css' media='screen' rel='stylesheet'/>
+    
+    <link href='https://zaap.bio/assets/page/css/link-custom.css?v=2023050115' media='screen' rel='stylesheet'/>
+    
+    <link href='https://zaap.bio/assets/page/css/animate.min.css' media='screen' rel='stylesheet'/>
+  
+    <link href='https://zaap.bio/assets/page/css/growl-notification.min.css' media='screen' rel='stylesheet'/>
+   
+<b:skin><![CDATA[
+/* Minified CSS BY (sanvedesign.com) Muhammad SA. Add Here Your Profile Banner Image */
+.profile_banner_main{background:url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLrcPvWHwJ5xmEtB9tUbPAX93zjCWB4Cn3Z7SqF4RtEnK93Y8TtjshxTzQ0Qf1tdqXLBSfvcOqRdsh9-_TOzPEofskd6ZDHRiNQQj1R3-i4BFecZddczVM_QlMa-gE8ENYns1CjA9OuFBMRZuc9WTpheID6YHtNfacx6rG0h3aJKnEEV58_RMpHvShrQ/s1600/9FD4F6DF-F86E-44CF-86AD-9460C0F5719D.jpeg') center/100% no-repeat!important;height:170px;position:absolute;top:0;width:100%;left:0}
+
+/* Minified CSS BY (sanvedesign.com) Muhammad SA. */
+.profile-info-div{padding-top:80px;padding-bottom:0;background-color:#f7f7f7!important;border-top-right-radius:80px;border-top-left-radius:80px}.profile-img-div{height:60px}.profile-main.animate__animated.animate__fadeIn{background-color:#f7f7f7!important;padding:30px 0;padding-bottom:0!important}.profile-img-div img{margin-top:20px!important;z-index:1}.link-body{min-height:100vh}.widget-input input:focus,input.form-control{box-shadow:none}.text-block-divider{background:#fff!important}.tiktok-video-thumbnail,.youtube-video-thumbnail{background-repeat:no-repeat;background-position:center;background-size:cover;align-items:center;box-shadow:0 4px 30px rgba(6,18,81,.1);display:flex}.tiktok-video-thumbnail{width:100%;height:500px;border:15px solid #f7f7f7;border-radius:35px;justify-content:center}.youtube-video-thumbnail{min-width:300px;min-height:200px!important;border:15px solid #f7f7f7;border-radius:35px;justify-content:center}.social-links-div svg{width:26px!important}.text-block-main{border-radius:40px}.single-product-div .product-card-price-badge,.single-product-div a.product-card-purchase-btn{border-color:transparent!important;background-color:#212930}.come-from-modal.left .modal-dialog,.come-from-modal.right .modal-dialog{position:fixed;margin:auto;width:500px;height:100%;-webkit-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-o-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}.come-from-modal.left .modal-content,.come-from-modal.right .modal-content{height:90vh;overflow-y:auto;border-radius:30px;padding:10px 15px!important}.come-from-modal.left .modal-body,.come-from-modal.right .modal-body{padding:15px 15px 80px}.come-from-modal.right.fade .modal-dialog{right:2%;-webkit-transition:opacity .3s linear,right .3s ease-out;-moz-transition:opacity .3s linear,right .3s ease-out;-o-transition:opacity .3s linear,right .3s ease-out;transition:opacity .3s linear,right .3s ease-out}.come-from-modal.right.fade.in .modal-dialog{right:0}.cart-details img{border-radius:10px}.cart-details p{font-weight:500}.cart-details strong{font-weight:700}#checkoutModal .up-in-toggle{width:100%;display:flex;align-items:center;justify-content:center;padding:3px;border-radius:7px;color:#5b5b5b;background:#f1f1f1}#checkoutModal .up-in-toggle label{display:inline-block;font-size:.9rem;padding:6px 16px;text-align:center;width:50%;float:left;color:#5b5b5b;transition:.1s ease-in-out}#checkoutModal .up-in-toggle label:hover{cursor:pointer}#checkoutModal .up-in-toggle input{clip:rect(0,0,0,0);height:1px;width:1px;border:0;overflow:hidden;flex-basis:auto}#checkoutModal .up-in-toggle input:checked+label{background:#fff;font-weight:500;box-shadow:0 4px 10px rgba(5,2,24,.06)}#checkoutModal .up-in-toggle label:first-of-type,#checkoutModal .up-in-toggle label:last-of-type{border-radius:7px}#checkoutModal input.form-control,#checkoutModal textarea.form-control{border-radius:14px!important;border:1px solid #d6d6d6!important;padding:8px 15px!important;font-weight:500!important}#checkoutModal input.form-control::placeholder,#checkoutModal textarea.form-control::placeholder{color:#8991a8!important;font-weight:500!important}.btn-purchase-block{border-radius:14px!important;color:#fff}#checkoutModal small{color:#8991a8!important}#checkoutModal .modal-footer{border:none!important;display:flex;align-items:center;justify-content:center}#checkoutModal .modal-content{overflow:hidden;padding-right:5px!important}.modal-content-indiv{overflow-y:auto}.modal-content-indiv::-webkit-scrollbar{width:.25em}.modal-content-indiv::-webkit-scrollbar-thumb{background-color:#dfdfdf}.link-content{padding-bottom:100px}.page-footer{position:absolute;width:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;bottom:0;left:0;padding:30px 0;transition:.6s}.accordion-body{background-color:#fff!important;color:#1e242a!important;border-color:#fff!important}.contact-accordion-button,.contact-form-submit-btn{color:#fff!important;background-color:#1e242a!important}.contact-accordion-button svg path,.contact-form-submit-btn svg path{stroke:#ffffff!important}.contact-textarea{border-color:#1e242a!important;background-color:#fff!important;color:#1e242a!important;border-width:3px!important}.contact-textarea::placeholder{color:#1e242a!important}.content-text a{color:#1e242a;text-decoration:underline;font-weight:600}.product-content-divider{background:#1e242a!important;opacity:.2}.product-content-image{border:2px solid #1e242a}
+.link-card div a,.product-card-a,.single-link-block-img,.text-block-main,.widget-block,html{background-color:#fff!important}@media(min-width:993px){.single-link-block-img{width:30%}}#navbar,.footer{display:none}.link-body,.skeleton-button,.skeleton-img,.skeleton-line{background-color:#f7f7f7!important}.single-link-block,input{background-color:#fff!important}.link-footer{padding:30px 0 20px;margin-top:30px;color:#1e242a;font-size:12px;font-weight:500}.single-link-block{box-shadow:0 0 15px rgb(17 21 26 / 15%)}.single-product-div .product-card-learn-more-btn,.single-product-div .product-card-price-badge,.single-product-div a.product-card-purchase-btn{background-color:#f7f7f7!important;color:#1e242a!important}.widget-input input{border:3px solid #1e242a!important}.widget-input input,.widget-input input::placeholder{color:#1e242a!important}.subscribe-next-btn svg rect{fill:#000}body{-webkit-font-smoothing:antialiased;-webkit-text-stroke:1px transparent;text-rendering:optimizeLegibility!important}.profile-main{width:100%;padding:50px 0}.profile-img-div{text-align:center!important;display:flex}.profile-info-div{text-align:center!important;align-items:start;margin-bottom:-1px}.profile-info-div h2{font-weight:600;letter-spacing:-1px}.product-link-description,.profile-info-div small{font-size:14px}.profile-info-div h2,.profile-info-div p,.profile-info-div small{width:100%;margin:0;text-align:center}.profile-info-div p{margin:10px 0}.container{max-width:1300px}.user-avatar{margin:0!important;max-width:150px;max-height:150px;width:120px;height:120px}.link-card{width:275px;height:260px;padding:10px 10px 10px 5px;margin:0}.link-card .link-btn-rounded,.link-card a,.product-card-a{border-radius:40px;padding:16px;min-height:360px;max-height:360px}.product-card-a{min-height:inherit}.link-card-single div:first-child,.link-card-single div:first-child a,.product-card-a{height:100%;min-height:inherit}.link-card-single div:first-child a,.product-card-a{max-height:fit-content!important}.link-img-div{width:100%;background-color:#f7f7f7;border-radius:25px;display:flex;align-items:center;justify-content:center;overflow:hidden}.link-img-div img{width:100%;min-height:100%}.link-title{font-size:22px;margin:15px 0 7px;font-weight:500!important;text-align:left}.product-link-title{font-size:18px}.link-description{margin-top:0;margin-bottom:0;font-size:15px;line-height:20px;text-align:left;font-weight:400}.div-block-342,.font-weight-medium2{font-weight:600}.social-links-div{padding:5px;display:inline-flex;-webkit-animation:1s in}.social-links-div .fa-2x{font-size:21px}.social-links-div:hover{transform:scale(1.2);-webkit-transform:scale(1.2);-moz-transform:scale(1.2);-o-transform:scale(1.2) -ms-transform: scale(1.2)}.div-block-342{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;width:90%;margin-top:0;padding-top:10px;padding-bottom:10px;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;border-radius:50px;position:absolute;background-color:#f7f7f7!important;color:#1e242a!important;bottom:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;left:5%}.profile-img-div{justify-content:center}.slick-list{padding:0 21% 0 5%!important}@media(max-width:550px){footer{height:auto}.checkout-modal-dialog{width:96%!important}}@media(max-width:500px){.price-btn,.purchase-btn{min-width:45%!important;font-size:14px!important}}.slick-track{margin-left:0!important;display:flex!important}.slick-slide{height:inherit!important}.links-slider{flex-basis:100%;padding:10px}.links-slider-main{margin-bottom:10px}._embed_video_wrapper{border:none!important}.links-slider-main::-webkit-scrollbar{height:.5em}.links-slider-main::-webkit-scrollbar-thumb{background-color:#d3d3d3;border-radius:50px}@media(min-width:767px){.links-slider{flex-wrap:wrap;display:flex;align-items:center;margin:0}.tiktok-links-slider-main .links-slider{justify-content:center}.link-card{flex-basis:33%;height:auto}}@media(max-width:1000px){.link-card{flex-basis:33%;height:auto}.link-card-single{flex-basis:33%;height:inherit}}@media(max-width:767px){.user-avatar{width:100px;height:100px}.profile-main{padding:25px 0}.link-card{flex-basis:auto}.profile_description{font-size:15px}.link-content{padding:0 1rem}.links-slider-main{overflow-x:scroll;overflow-y:hidden}.links-slider{display:flex}.folder-title{text-align:left!important}.link-title{max-height:52px;overflow:hidden}.link-description-child-link{max-height:80px;overflow:hidden}}.profile_description{font-size:15px;font-weight:500}.folder-title,.link-description,.link-title,.post-card h4,.post-card p,.product-description,.product-short-description,.product-title,.single-link-block-details h4,.single-link-block-details p,.social-links-div,.text-block-main h1,.text-block-main h4,.text-block-main p,.widget-block h4,.widget-block p{color:#1e242a!important}input.form-control:focus,textarea.form-control:focus{color:#1e242a!important;background-color:transparent!important}.single-link-block-arrow svg rect{fill:#1E242A!important}.product-title{letter-spacing:-1px;font-weight:600}.folder-title{font-size:22px;text-align:center;font-weight:500!important}.btn-primary.focus,.btn-primary:focus{box-shadow:0 0 15px #00008024!important}.div-block-342,.product-card-price-badge{color:#fff}.profile_title{overflow-wrap:anywhere}.post-border-light{box-shadow:0 0 0 3px rgba(0,0,0,.08);transition:box-shadow .3s}.post-border-light:hover{box-shadow:0 0 0 6px rgba(0,0,0,.08)}.post-border-dark{box-shadow:0 0 0 3px rgba(255,255,255,.08);transition:box-shadow .3s}.post-border-dark:hover{box-shadow:0 0 0 6px rgba(255,255,255,.08)}.page-menu-btn-inverse.active,.page-menu-btn-inverse:hover{background-color:#1e242a!important;color:#fff!important;box-shadow:none}.page-menu-btn,.page-menu-btn-inverse,.purchase-btn,.subscribe-btn,.subscribe-next-btn{background-color:#1e242a!important;border:none;color:#fff!important;font-weight:500}.page-menu-btn,.purchase-btn{border:3px solid transparent!important}.product-card-a a.product-card-learn-more-btn{border-color:transparent!important;background-color:#f7f7f7!important;color:#1e242a!important}.page-menu-btn-inverse,.price-btn{border:3px solid #1e242a!important;color:#1e242a!important;background:0 0!important}.price-btn,.purchase-btn{border-radius:16px!important;min-width:220px;font-size:16px;font-weight:700;padding-top:12px!important;padding-bottom:12px!important}.page-menu-btn,.page-menu-btn-inverse{font-size:16px;min-width:90px;transition:.3s;-webkit-transition:.3s;-moz-transition:.3s;-o-transition:.3s;-ms-transition:.3s}.page-menu-btn-inverse:hover{border:none}.page-menu-btn-inverse.active{font-weight:500;border:3px solid transparent!important}input{border-radius:30px!important;padding:12px!important}
+]]></b:skin>
+
+  <!--[ <head> close ]-->
+  </head>
+    
+  <!--[ <body> open ]-->
+  <body>
+  
+  <!--[ Profile Section Start ]-->
+  <div class='link-body'>
+    <div class='full-page-loader d-none'>
+      <div class='lds-ripple'/>
+        </div>
+          <div class='profile-main animate__animated animate__fadeIn'>
+            <div class='profile_banner_main'/>
+              <div class=''>
+                <div class='row m-0'>
+        
+  <!--[ User Avatar Image ]-->
+        <div class='col-lg-12 col-12 text-center profile-img-div'>
+        <img class='user-avatar' src='https://protemplates.in/wp-content/uploads/2023/08/ezgif.com-gif-maker-18.webp'/></div>
+        
+  <!--[ User Name Text ]-->
+        <div class='col-lg-12 col-12 profile-info-div'>
+          <h2 class='profile_title d-flex align-items-center justify-content-center mt-2 mb-2'>
+          <span class='mr-2'>Pro Templates</span> <svg fill='none' height='15' viewbox='0 0 137 137' width='15' xmlns='http://www.w3.org/2000/svg'>
+          <circle cx='68.5004' cy='68.5' fill='#FDFDFD' r='41.1'/>
+          <path d='M137 71.711C137 76.5006 135.849 80.9424 133.548 85.0096C131.247 89.0768 128.17 92.261 124.29 94.4819C124.397 95.2043 124.451 96.3282 124.451 97.8534C124.451 105.105 122.016 111.259 117.199 116.343C112.356 121.454 106.523 123.996 99.6996 123.996C96.6492 123.996 93.7326 123.434 90.9766 122.31C88.8359 126.698 85.7588 130.23 81.7184 132.933C77.7047 135.662 73.2896 137 68.5 137C63.6033 137 59.1615 135.689 55.2014 133.013C51.2145 130.364 48.1641 126.805 46.0234 122.31C43.2674 123.434 40.3775 123.996 37.3004 123.996C30.4771 123.996 24.6172 121.454 19.7205 116.343C14.8238 111.259 12.3889 105.078 12.3889 97.8534C12.3889 97.0506 12.4959 95.9268 12.6832 94.4819C8.80332 92.2342 5.72617 89.0768 3.425 85.0096C1.15059 80.9424 0 76.5006 0 71.711C0 66.627 1.28438 61.9444 3.82637 57.7166C6.36836 53.4889 9.79336 50.3582 14.0746 48.3246C12.9508 45.2743 12.3889 42.1971 12.3889 39.1467C12.3889 31.9221 14.8238 25.741 19.7205 20.6571C24.6172 15.5731 30.4771 13.0043 37.3004 13.0043C40.3508 13.0043 43.2674 13.5662 46.0234 14.6901C48.1641 10.3018 51.2412 6.76976 55.2816 4.06722C59.2953 1.36468 63.7104 3.05176e-05 68.5 3.05176e-05C73.2896 3.05176e-05 77.7047 1.36468 81.7184 4.04046C85.732 6.743 88.8359 10.275 90.9766 14.6633C93.7326 13.5395 96.6225 12.9776 99.6996 12.9776C106.523 12.9776 112.356 15.5196 117.199 20.6303C122.042 25.741 124.451 31.8953 124.451 39.12C124.451 42.4914 123.942 45.5418 122.925 48.2979C127.207 50.3315 130.632 53.4621 133.174 57.6899C135.716 61.9444 137 66.627 137 71.711ZM65.5834 92.3412L93.8664 49.9836C94.5889 48.8598 94.8029 47.6289 94.5621 46.3178C94.2945 45.0067 93.6256 43.9631 92.5018 43.2674C91.3779 42.545 90.1471 42.3041 88.8359 42.4914C87.498 42.7055 86.4277 43.3477 85.625 44.4715L60.7135 81.9325L49.2344 70.4801C48.2176 69.4633 47.0402 68.9817 45.7291 69.0352C44.3912 69.0887 43.2406 69.5703 42.2238 70.4801C41.3141 71.3899 40.8592 72.5405 40.8592 73.9319C40.8592 75.2965 41.3141 76.4471 42.2238 77.3836L57.9842 93.144L58.7602 93.7594C59.6699 94.3748 60.6064 94.6692 61.5162 94.6692C63.309 94.6424 64.6736 93.8932 65.5834 92.3412Z' fill='#1DA1F2'/></svg></h2>
+          
+          <div class='profile_description pt-1 pb-1'>
+            <div>
+              I like to read and learn new things, especially about UI and UX and then applying them in my work.
+            </div>
+          </div>
+          <p class='profile_socials'><span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://instagram.com/@protemplates' target='_blank'><svg fill='none' height='22' viewbox='0 0 80 80' width='20' xmlns='http://www.w3.org/2000/svg'>
+          <path d='M56.6428 19.2306C56.6428 16.9365 58.5056 15.0767 60.8035 15.0767C63.1014 15.0767 64.9642 16.9365 64.9642 19.2306C64.9642 21.5247 63.1014 23.3845 60.8035 23.3845C58.5056 23.3845 56.6428 21.5247 56.6428 19.2306Z' fill='#1A1923'/>
+          <path clip-rule='evenodd' d='M40 20.2691C29.085 20.2691 20.2367 29.1029 20.2367 40.0001C20.2367 50.8972 29.085 59.7311 40 59.7311C50.915 59.7311 59.7633 50.8972 59.7633 40.0001C59.7633 29.1029 50.915 20.2691 40 20.2691ZM26.4777 40.0001C26.4777 32.5441 32.5319 26.4999 40 26.4999C47.4682 26.4999 53.5223 32.5441 53.5223 40.0001C53.5223 47.456 47.4682 53.5002 40 53.5002C32.5319 53.5002 26.4777 47.456 26.4777 40.0001Z' fill='#1A1923' fill-rule='evenodd'/>
+          <path clip-rule='evenodd' d='M61.878 1.9214C47.4547 0.312009 32.5455 0.312009 18.1221 1.9214C9.75053 2.85551 2.99216 9.43948 2.00793 17.8408C0.283163 32.5635 0.283163 47.4366 2.00793 62.1593C2.99216 70.5607 9.75053 77.1446 18.1221 78.0787C32.5455 79.6881 47.4547 79.6881 61.878 78.0787C70.2496 77.1446 77.008 70.5607 77.9922 62.1593C79.717 47.4366 79.717 32.5635 77.9922 17.8408C77.008 9.43948 70.2496 2.85551 61.878 1.9214ZM18.8153 8.11368C32.778 6.5557 47.2222 6.5557 61.1848 8.11368C66.719 8.73119 71.1522 13.0912 71.7934 18.5647C73.4618 32.8064 73.4618 47.1937 71.7934 61.4355C71.1522 66.909 66.719 71.2689 61.1848 71.8865C47.2222 73.4444 32.778 73.4444 18.8153 71.8865C13.2811 71.2689 8.84795 66.909 8.20673 61.4355C6.5383 47.1937 6.5383 32.8064 8.20673 18.5647C8.84795 13.0912 13.2811 8.73119 18.8153 8.11368Z' fill='#1A1923' fill-rule='evenodd'/></svg></a></span> <span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://facebook.com/@protemplates' target='_blank'><svg fill='none' height='22' viewbox='0 0 83 81' width='21' xmlns='http://www.w3.org/2000/svg'>
+          <path clip-rule='evenodd' d='M41.5 6.225C22.1063 6.225 6.38461 21.5536 6.38461 40.4625C6.38461 57.7252 19.4881 72.0039 36.5263 74.3592V57.1077H30.3684C29.0604 57.1077 28 56.0401 28 54.7231V43.2769C28 41.9599 29.0604 40.8923 30.3684 40.8923H36.5263V34.6923C36.5263 30.2652 38.273 26.0195 41.3822 22.8891C44.4913 19.7586 48.7082 18 53.1052 18H61.6316C62.9396 18 64 19.0676 64 20.3846V31.8308C64 33.1478 62.9396 34.2154 61.6316 34.2154H53.1052C52.9796 34.2154 52.8591 34.2656 52.7703 34.3551C52.6815 34.4445 52.6316 34.5658 52.6316 34.6923V40.8923H61.6316C62.3609 40.8923 63.0495 41.2306 63.4984 41.8094C63.9472 42.3882 64.1061 43.1429 63.9293 43.8553L61.0872 55.3014C60.8236 56.363 59.8762 57.1077 58.7895 57.1077H52.6316V72.944C66.5691 68.4054 76.6154 55.5779 76.6154 40.4625C76.6154 21.5536 60.8937 6.225 41.5 6.225ZM51.1604 79.8229C69.4211 75.5781 83 59.5664 83 40.4625C83 18.1157 64.4198 0 41.5 0C18.5802 0 0 18.1157 0 40.4625C-1.95362e-06 62.8093 18.5802 80.925 41.5 80.925C44.5466 80.925 47.5166 80.6049 50.3764 79.9973C50.6528 79.9842 50.9167 79.9234 51.1604 79.8229ZM47.8947 74.1336V54.7231C47.8947 53.4061 48.9551 52.3385 50.2631 52.3385H56.9403L58.5981 45.6615H50.2631C48.9551 45.6615 47.8947 44.5939 47.8947 43.2769V34.6923C47.8947 33.3009 48.4437 31.9666 49.4209 30.9827C50.398 29.9989 51.7233 29.4462 53.1052 29.4462H59.2631V22.7692H53.1052C49.9645 22.7692 46.9524 24.0254 44.7316 26.2614C42.5108 28.4974 41.2631 31.5301 41.2631 34.6923V43.2769C41.2631 44.5939 40.2028 45.6615 38.8947 45.6615H32.7368V52.3385H38.8947C40.2028 52.3385 41.2631 53.4061 41.2631 54.7231V74.6992C41.342 74.6997 41.421 74.7 41.5 74.7C43.6839 74.7 45.8212 74.5056 47.8947 74.1336Z' fill='black' fill-rule='evenodd'/></svg></a></span> <span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://twitter.com/@protemplates' target='_blank'><svg fill='none' height='20' viewbox='0 0 83 63' width='22' xmlns='http://www.w3.org/2000/svg'>
+          <path clip-rule='evenodd' d='M53.1643 0.287013C55.1269 -0.0217428 57.3247 -0.124833 59.393 0.196545C63.0869 0.77051 66.4989 2.34732 69.196 4.71136C70.9591 4.74798 72.6917 4.42898 74.2249 3.97421C75.5224 3.58934 76.6184 3.12462 77.3865 2.75717C77.7684 2.57446 78.0634 2.4186 78.2552 2.31309C78.3509 2.26041 78.4205 2.22055 78.4619 2.19647L78.4986 2.17498C79.6444 1.47392 81.1701 1.61037 82.1463 2.50209C83.1228 3.39403 83.2801 4.79425 82.5224 5.85048C81.7205 6.96837 80.6074 8.96123 79.3602 11.1941C79.1641 11.5452 78.9647 11.9022 78.7627 12.2626C78.0474 13.5389 77.314 14.8288 76.6303 15.9355C76.201 16.6304 75.742 17.3359 75.2791 17.9455V18.9162C75.3085 22.4817 74.8632 26.0286 73.9595 29.4793C73.391 31.6504 72.641 33.7833 71.7135 35.8588C69.3107 41.2363 65.7653 46.12 61.2844 50.2249C56.8034 54.3298 51.4768 57.5735 45.6157 59.7666C39.7597 61.9576 33.4875 63.056 27.1646 62.9978C17.9987 63.0051 9.02564 60.5797 1.32512 56.0133C0.190915 55.3407 -0.286618 54.0375 0.174074 52.8719C0.634766 51.7064 1.91139 50.988 3.25125 51.1403C4.41077 51.2721 5.57821 51.3364 6.74658 51.3329C10.9446 51.3221 15.0627 50.4702 18.8223 48.8653C17.6273 48.3657 16.4864 47.7497 15.4203 47.0236C12.2867 44.8896 9.95534 41.9114 8.75061 38.5037C8.43755 37.6181 8.65157 36.6467 9.31485 35.9426C9.32673 35.93 9.33873 35.9175 9.35083 35.9052C8.64233 35.3249 7.97938 34.6932 7.36906 34.0137C4.62305 30.9567 3.11101 27.1224 3.08869 23.1594L3.08861 23.1457L3.08865 22.9684C3.08865 22.0258 3.63202 21.1536 4.51684 20.6759C4.74114 20.5548 4.97888 20.4637 5.22344 20.4026C3.91733 18.009 3.23811 15.366 3.24307 12.6846C3.24152 9.64692 4.10548 6.66167 5.74911 4.02554C6.2236 3.26453 7.0761 2.76731 8.02781 2.69648C8.97952 2.62566 9.90806 2.99033 10.5098 3.67125C14.2257 7.87633 18.8632 11.3164 24.121 13.7681C26.8239 15.0284 29.6596 16.0129 32.5773 16.7094C34.2131 17.0999 35.8747 17.3998 37.5531 17.607C37.4792 15.0426 38.0305 12.4796 39.1876 10.1114C40.885 6.6374 43.7899 3.77905 47.4466 1.98467C48.9952 1.22475 51.051 0.619484 53.1643 0.287013ZM9.62545 27.0471C10.1259 28.3409 10.8705 29.5546 11.8358 30.6292C13.7326 32.7408 16.3652 34.1858 19.2884 34.7199C20.5904 34.9578 21.5495 35.9785 21.6153 37.1963C21.681 38.4141 20.8365 39.5169 19.5664 39.8719C18.5145 40.1659 17.4367 40.3708 16.3467 40.4846C17.067 41.3373 17.9143 42.1012 18.8694 42.7516C21.0358 44.227 23.6491 45.0455 26.3457 45.0932C27.5691 45.1148 28.6457 45.8405 29.0349 46.906C29.4241 47.9715 29.042 49.1467 28.0804 49.8417C24.0301 52.7687 19.3466 54.8097 14.3838 55.8517C18.497 57.0615 22.8109 57.6843 27.1743 57.6795L27.2079 57.6794C32.7672 57.7324 38.2822 56.7677 43.4309 54.8413C48.5796 52.9148 53.2587 50.0654 57.195 46.4595C61.1312 42.8536 64.2457 38.5634 66.3564 33.8397C67.1711 32.0165 67.83 30.1428 68.3294 28.2356C69.124 25.2014 69.5152 22.0825 69.4885 18.9473L69.4884 18.9265V17.0473C69.4884 16.4025 69.7434 15.7797 70.2061 15.2948C70.4735 15.0146 70.9413 14.3673 71.5938 13.3111C72.214 12.3072 72.9003 11.1021 73.6141 9.82856C73.6573 9.75154 73.7006 9.67412 73.7441 9.59635C71.8927 9.9656 69.7943 10.1591 67.5945 9.94081C66.8978 9.87166 66.2521 9.57281 65.7771 9.09969C63.8358 7.16616 61.2506 5.8791 58.427 5.44037C57.1742 5.2457 55.6595 5.29026 54.142 5.52901C52.4931 5.78841 51.0582 6.24229 50.1754 6.67546C47.6496 7.91488 45.6432 9.88921 44.4708 12.2888C43.2983 14.6884 43.0263 17.3775 43.6972 19.9344C43.9111 20.7496 43.6938 21.6096 43.111 22.255C42.5281 22.9004 41.648 23.2556 40.7362 23.2132C37.4802 23.0619 34.2587 22.6058 31.1207 21.8568C27.8011 21.0644 24.5748 19.9441 21.4997 18.5103C16.9722 16.3992 12.849 13.644 9.27874 10.3548C9.11586 11.1192 9.03318 11.8994 9.03374 12.6845L9.03374 12.6913C9.0297 14.6439 9.55144 16.5672 10.5525 18.2898C11.5535 20.0124 13.0028 21.4809 14.7714 22.5646C15.8447 23.2223 16.3146 24.4529 15.9237 25.5822C15.5328 26.7116 14.3755 27.4671 13.0857 27.4348C11.9175 27.4056 10.7591 27.2752 9.62545 27.0471Z' fill='#1A1923' fill-rule='evenodd'/></svg></a></span> <span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://tiktok.com/@protemplates' target='_blank'><svg fill='none' height='23' viewbox='0 0 32 30' width='24' xmlns='http://www.w3.org/2000/svg'>
+          <path d='M16.5059 3V2C15.9884 2 15.5564 2.39483 15.51 2.91025L16.5059 3ZM21.1071 3H22.1071C22.1071 2.44772 21.6594 2 21.1071 2V3ZM12.0159 17.0011L12.2125 17.9816C12.6797 17.8879 13.0159 17.4776 13.0159 17.0011H12.0159ZM12.0159 12.3175H13.0159C13.0159 12.0372 12.8983 11.7698 12.6917 11.5804C12.4851 11.391 12.2085 11.297 11.9292 11.3213L12.0159 12.3175ZM21.1071 12.491L21.6533 11.6533C21.3459 11.4529 20.9534 11.4369 20.6308 11.6117C20.3081 11.7865 20.1071 12.124 20.1071 12.491H21.1071ZM27.6071 14.1012L27.6969 15.0972C28.2123 15.0507 28.6071 14.6187 28.6071 14.1012H27.6071ZM27.6071 9.5H28.6071C28.6071 8.94772 28.1594 8.5 27.6071 8.5V9.5ZM16.5059 4H21.1071V2H16.5059V4ZM17.4643 3.92857C17.4643 3.64556 17.477 3.36579 17.5019 3.08975L15.51 2.91025C15.4797 3.24588 15.4643 3.58556 15.4643 3.92857H17.4643ZM15.4643 3.92857V13.1544H17.4643V3.92857H15.4643ZM15.4643 13.1544V20.6429H17.4643V13.1544H15.4643ZM15.4643 20.6429C15.4643 22.1419 14.2491 23.3571 12.75 23.3571V25.3571C15.3536 25.3571 17.4643 23.2465 17.4643 20.6429H15.4643ZM12.75 23.3571C11.2509 23.3571 10.0357 22.1419 10.0357 20.6429H8.03571C8.03571 23.2465 10.1464 25.3571 12.75 25.3571V23.3571ZM10.0357 20.6429C10.0357 19.3286 10.9708 18.2305 12.2125 17.9816L11.8194 16.0206C9.66156 16.4532 8.03571 18.357 8.03571 20.6429H10.0357ZM13.0159 17.0011V12.3175H11.0159V17.0011H13.0159ZM11.9292 11.3213C7.1453 11.7376 3.39286 15.7515 3.39286 20.6429H5.39286C5.39286 16.7979 8.3431 13.6409 12.1026 13.3137L11.9292 11.3213ZM3.39286 20.6429C3.39286 25.8107 7.58219 30 12.75 30V28C8.68676 28 5.39286 24.7061 5.39286 20.6429H3.39286ZM12.75 30C17.9178 30 22.1071 25.8107 22.1071 20.6429H20.1071C20.1071 24.7061 16.8132 28 12.75 28V30ZM22.1071 20.6429V12.491H20.1071V20.6429H22.1071ZM26.6786 13.1429C24.8229 13.1429 23.0981 12.5953 21.6533 11.6533L20.561 13.3287C22.3208 14.4761 24.4233 15.1429 26.6786 15.1429V13.1429ZM27.5174 13.1053C27.2414 13.1301 26.9616 13.1429 26.6786 13.1429V15.1429C27.0216 15.1429 27.3613 15.1274 27.6969 15.0972L27.5174 13.1053ZM26.6071 9.5V14.1012H28.6071V9.5H26.6071ZM26.6786 10.5H27.6071V8.5H26.6786V10.5ZM20.1071 3.92857C20.1071 7.55787 23.0493 10.5 26.6786 10.5V8.5C24.1538 8.5 22.1071 6.4533 22.1071 3.92857H20.1071ZM20.1071 3V3.92857H22.1071V3H20.1071Z' fill='#414863'/></svg></a></span> <span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://api.whatsapp.com/send?phone=+8801700000000' target='_blank'><svg fill='none' height='22' viewbox='0 0 83 83' width='18' xmlns='http://www.w3.org/2000/svg'>
+          <path d='M28.3468 21.63C29.1093 21.6505 29.9547 21.6919 30.7589 23.4842C31.2923 24.6773 32.1907 26.8739 32.9226 28.6632C33.4921 30.0555 33.9607 31.2013 34.078 31.4358C34.346 31.9713 34.5109 32.5893 34.1605 33.3101C34.1191 33.3952 34.0801 33.4765 34.0425 33.5548C33.7614 34.1405 33.5613 34.5574 33.0886 35.1024C32.8942 35.3264 32.6917 35.5721 32.4899 35.8168C32.1351 36.2473 31.7826 36.675 31.4804 36.9771C30.9444 37.5123 30.3876 38.0896 31.006 39.1607C31.6248 40.2317 33.7895 43.7544 36.985 46.5972C40.4204 49.6677 43.4077 50.9617 44.9178 51.6158C45.211 51.7428 45.4485 51.8457 45.6227 51.9327C46.695 52.4683 47.3339 52.3858 47.9524 51.665C48.5712 50.9437 50.6325 48.5335 51.3542 47.4624C52.0552 46.3914 52.7766 46.5562 53.7663 46.9269C54.7558 47.2976 60.0334 49.8932 61.1053 50.4287C61.3172 50.5346 61.5154 50.63 61.6991 50.7185C62.445 51.0776 62.952 51.3216 63.167 51.6855C63.435 52.1386 63.435 54.2811 62.5486 56.7942C61.6416 59.3074 57.2709 61.7176 55.2917 61.903C55.1043 61.9207 54.9179 61.9434 54.7259 61.9667C52.9122 62.1869 50.6098 62.4666 42.4067 59.225C32.2989 55.2346 25.6266 45.3339 24.2776 43.3322C24.1711 43.1742 24.0978 43.0654 24.0586 43.0126L24.0357 42.982C23.422 42.1575 19.6673 37.1137 19.6673 31.9098C19.6673 26.9308 22.1104 24.3387 23.2247 23.1564C23.2953 23.0814 23.3606 23.0122 23.4196 22.9483C24.409 21.8772 25.5637 21.6095 26.2852 21.6095C27.007 21.6095 27.7284 21.6095 28.3468 21.63Z' fill='black'/>
+          <path clip-rule='evenodd' d='M0.41706 80.8802C0.0760863 82.1228 1.20335 83.2697 2.44548 82.9439L21.6467 77.909C27.7077 81.2049 34.5317 82.9559 41.4795 82.9559H41.5C64.363 82.9559 83 64.3541 83 41.4884C83 30.4057 78.6908 19.9819 70.857 12.1538C63.0231 4.32598 52.6118 0 41.4996 0C18.637 0 2.6435e-06 18.6017 2.6435e-06 41.4679C-0.00259546 48.7421 1.90996 55.889 5.54566 62.1912L0.41706 80.8802ZM11.5724 63.858C12.0176 62.2358 11.7952 60.502 10.9552 59.0459C7.87057 53.699 6.24908 47.6354 6.25129 41.4679C6.25129 22.0975 22.0598 6.27581 41.4996 6.27581C50.9595 6.27581 59.785 9.945 66.447 16.6018C73.1014 23.2513 76.7487 32.074 76.7487 41.4884C76.7487 60.8583 60.9403 76.6801 41.5 76.6801H41.4795C35.5761 76.6801 29.775 75.1917 24.624 72.3907C23.2299 71.6326 21.6009 71.4346 20.0669 71.8369L8.55447 74.8557L11.5724 63.858Z' fill='black' fill-rule='evenodd'/></svg></a></span> <span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://youtube.com/@protemplates' target='_blank'><svg fill='none' height='20' viewbox='0 0 97 68' width='23' xmlns='http://www.w3.org/2000/svg'>
+          <path clip-rule='evenodd' d='M40.7054 17.5682C39.6275 16.9439 38.2852 16.9276 37.1913 17.5254C36.0975 18.1233 35.4214 19.2429 35.4214 20.4563V47.4008C35.4214 48.6143 36.0975 49.7339 37.1913 50.3317C38.2852 50.9296 39.6275 50.9132 40.7054 50.2889L63.9649 36.8167C65.0158 36.208 65.6588 35.1117 65.6588 33.9286C65.6588 32.7455 65.0158 31.6492 63.9649 31.0405L40.7054 17.5682ZM55.3886 33.9286L42.3993 41.4522V26.405L55.3886 33.9286Z' fill='#1A1923' fill-rule='evenodd'/>
+          <path clip-rule='evenodd' d='M71.6164 0.882375C56.0388 -0.294125 40.3898 -0.294125 24.8122 0.882375L14.3886 1.66961C8.05011 2.14833 2.86469 6.73431 1.81691 12.788C-0.605637 26.7847 -0.605637 41.0724 1.81691 55.0691C2.86469 61.1228 8.05011 65.7088 14.3886 66.1875L24.8122 66.9748C40.3898 68.1513 56.0388 68.1513 71.6164 66.9748L82.0399 66.1875C88.3785 65.7088 93.5639 61.1228 94.6117 55.0691C97.0342 41.0724 97.0342 26.7847 94.6117 12.788C93.5639 6.73431 88.3785 2.14833 82.0399 1.66961L71.6164 0.882375ZM25.3564 7.59799C40.5718 6.44885 55.8568 6.44885 71.0722 7.59799L81.4957 8.38523C84.6386 8.62259 87.2097 10.8965 87.7292 13.8982C90.0246 27.1598 90.0246 40.6973 87.7292 53.959C87.2097 56.9607 84.6386 59.2346 81.4957 59.4719L71.0721 60.2592C55.8568 61.4083 40.5718 61.4083 25.3564 60.2592L14.9329 59.4719C11.79 59.2346 9.2189 56.9607 8.69937 53.959C6.40403 40.6973 6.40403 27.1598 8.69937 13.8982C9.2189 10.8965 11.79 8.62259 14.9329 8.38523L25.3564 7.59799Z' fill='#1A1923' fill-rule='evenodd'/></svg></a></span> <span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://protemplates.in/' target='_blank'><svg fill='none' height='22' viewbox='0 0 80 80' width='18' xmlns='http://www.w3.org/2000/svg'>
+          <path d='M40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40C0 17.9086 17.9086 0 40 0ZM40 8C22.3269 8 8 22.3269 8 40C8 57.6731 22.3269 72 40 72C57.6731 72 72 57.6731 72 40C72 22.3269 57.6731 8 40 8ZM60.8829 23.8692L60.7653 24.2943L52.28 49.7502C51.9317 50.7953 51.1706 51.6435 50.1855 52.106L49.7502 52.28L24.2943 60.7653C21.3094 61.7603 18.4631 59.0948 19.1171 56.1308L19.2347 55.7057L27.72 30.2498C28.0683 29.2047 28.8294 28.3565 29.8145 27.894L30.2498 27.72L55.7057 19.2347C58.6906 18.2397 61.5369 20.9052 60.8829 23.8692ZM34.6769 34.6769L29.3566 50.6434L45.3203 45.3203L34.6769 34.6769Z' fill='black'/></svg></a></span> <span class='d-inline-flex align-items-center justify-content-center'>
+          <a class='social-links-div' href='https://telegram.im/@protemplates' target='_blank'><svg fill='none' height='22' viewbox='0 0 85 75' width='18' xmlns='http://www.w3.org/2000/svg'>
+          <path clip-rule='evenodd' d='M18.3033 45.4285C18.4862 45.4907 18.6708 45.5348 18.8553 45.5619C19.0564 46.039 19.3163 46.6563 19.6194 47.3781C20.3593 49.1398 21.3562 51.5223 22.3852 54.0079C24.4837 59.077 26.6005 64.3021 27.068 65.7978C27.6468 67.6467 28.2585 68.9037 28.9264 69.7619C29.2717 70.2056 29.6711 70.5932 30.1384 70.8866C30.3736 71.0342 30.6221 71.1554 30.8815 71.2457C30.8929 71.2496 30.9043 71.2535 30.9158 71.2574C32.2529 71.767 33.4719 71.5546 34.2352 71.2951C34.6436 71.1563 34.974 70.9885 35.2082 70.8526C35.3276 70.7834 35.4285 70.7186 35.509 70.664L35.5279 70.6511L47.3368 63.2166L60.9769 73.7739C61.1783 73.9298 61.3977 74.0604 61.6303 74.1628C63.2689 74.8847 64.8557 75.1366 66.3485 74.9307C67.8386 74.7252 69.0218 74.0931 69.9024 73.3818C70.765 72.6851 71.3496 71.9051 71.7137 71.3252C71.8996 71.0292 72.0393 70.7674 72.1377 70.5668C72.1872 70.466 72.227 70.3792 72.2577 70.3094L72.2971 70.2174L72.3119 70.1814L72.3182 70.1659L72.321 70.1589L72.3236 70.1523C72.3953 69.9713 72.4502 69.7841 72.4878 69.593L84.9401 6.21232C84.9799 6.00962 85 5.80347 85 5.59682C85 3.74075 84.3073 1.97585 82.6784 0.90487C81.2863 -0.0104705 79.7354 -0.0498705 78.7552 0.0252349C77.698 0.106252 76.7214 0.369752 76.0662 0.580309C75.7252 0.689887 75.4393 0.795612 75.2331 0.876269C75.1295 0.916806 75.0446 0.951584 74.9813 0.978109L74.9338 0.998301L5.09867 28.6552L5.08963 28.6584C5.04512 28.6748 4.98799 28.6963 4.92008 28.723C4.78485 28.7762 4.60367 28.8511 4.39203 28.9479C3.97928 29.1368 3.40025 29.4319 2.80606 29.8427C1.85679 30.4989 -0.326334 32.2963 0.0412788 35.263C0.33455 37.6297 1.94061 39.0833 2.91913 39.7822C3.45643 40.166 3.96687 40.4405 4.33862 40.6192C4.51108 40.7021 4.86914 40.8489 5.02451 40.9126L5.06371 40.9287L18.3033 45.4285ZM77.3778 6.82449L77.3681 6.82876C77.3333 6.84403 77.2983 6.85865 77.263 6.87263L7.34305 34.5631C7.30654 34.5775 7.26976 34.5913 7.23274 34.6044L7.19382 34.6193C7.14909 34.6369 7.07378 34.6677 6.97926 34.7109C6.92566 34.7355 6.86973 34.7622 6.8127 34.791C6.89105 34.8355 6.96604 34.8742 7.03267 34.9062C7.09664 34.937 7.14543 34.958 7.17214 34.9691L20.303 39.4319C20.5434 39.5136 20.7674 39.6218 20.9731 39.7523L64.3305 14.1288L64.371 14.1046C64.4027 14.0857 64.4441 14.0615 64.4938 14.0332C64.5925 13.9768 64.7281 13.9019 64.8894 13.819C65.1903 13.6644 65.6717 13.4349 66.2141 13.2656C66.5917 13.1478 67.7051 12.8159 68.9089 13.2057C69.6518 13.4462 70.421 13.9634 70.9213 14.8396C71.1699 15.2749 71.3023 15.7121 71.3664 16.1124C71.5368 16.7429 71.5098 17.3655 71.3765 17.9031C71.0892 19.061 70.2834 19.9642 69.5501 20.6551C68.922 21.2474 60.7935 29.1601 52.7747 36.9713C48.7758 40.8666 44.8177 44.7234 41.8593 47.6065L39.9162 49.5002L64.4509 68.4899C65.0136 68.6933 65.3463 68.6828 65.5002 68.6616C65.6836 68.6363 65.8336 68.5651 65.9869 68.4412C66.1584 68.3028 66.3083 68.1158 66.4204 67.9374L66.4249 67.9301L78.5023 6.45815C78.323 6.50165 78.1418 6.55343 77.9671 6.60957C77.7693 6.67314 77.6061 6.73369 77.498 6.77601C77.4444 6.79696 77.4059 6.81285 77.3849 6.82163L77.3778 6.82449ZM42.024 59.1045L37.1292 55.316L35.9431 62.9329L42.024 59.1045ZM32.6388 47.7982L37.5064 43.0541C40.465 40.1709 44.4235 36.3137 48.4228 32.418L52.4862 28.4603L25.2435 44.5603L25.3896 44.9082C26.1321 46.6761 27.1335 49.0692 28.168 51.568C28.9415 53.4365 29.7504 55.4038 30.4871 57.2253L31.6697 49.6308C31.7837 48.8985 32.138 48.2647 32.6388 47.7982Z' fill='black' fill-rule='evenodd'/></svg></a></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <!--[ Post Section ]-->
+  <b:section class='Blog Post' id='Blog Post' maxwidgets='1' showaddelement='yes'/>
+  <div class='container animate__animated animate__fadeIn'>
+    <div class='row d-flex justify-content-center text-center'>
+      <div class='col-md-12 link-content'>
+        <main class='mt-4' id='links'>
+          <h3 class='pl-2 pt-3 font-weight-medium2 folder-title'>
+          One4Wall: My new wallpapers app</h3>
+          <div class='row mb-4 mt-2 links-slider-main'>
+            <div class='links-slider'>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='623172' href='https://apps.apple.com/rs/app/one4wall-wallpapers/id6446678464' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/mi4mneoo73f5ko2p5kgjj9arjpao/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>One4Wall for iOS</h4>
+                  <p>AI-generated. Hand-edited. Perfect wallpapers
+                  for your iPhone and iPad.</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='623172' href='https://apps.apple.com/rs/app/one4wall-wallpapers/id6446678464' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/mi4mneoo73f5ko2p5kgjj9arjpao/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>One4Wall for iOS</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  AI-generated. Hand-edited. Perfect wallpapers for
+                  your iPhone and iPad.</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='623176' href='https://play.google.com/store/apps/details?id=one4studio.wallpaper.one4wall' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/ijid9bc4qtzb5x3mzmh6yup9m3qy/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>One4Wall for Android</h4>
+                  <p>AI-generated. Hand-edited. Perfect wallpapers
+                  for your smartphone or tablet.</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='623176' href='https://play.google.com/store/apps/details?id=one4studio.wallpaper.one4wall' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/ijid9bc4qtzb5x3mzmh6yup9m3qy/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                    </div>
+                  </div>
+                    
+                  <h4 class='link-title'>One4Wall for Android</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  AI-generated. Hand-edited. Perfect wallpapers for
+                  your smartphone or tablet.</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 class='pl-2 pt-3 font-weight-medium2 folder-title'>
+          Featured Icon Packs</h3>
+          <div class='row mb-4 mt-2 links-slider-main'>
+            <div class='links-slider'>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514259' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.lena' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/cc705aca-e6ee-4996-2152-88d1c9cacb00/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Lena</h4>
+                  <p>Clean and simple colorful glyph icons for your
+                  homescreen and app drawer</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514259' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.lena' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/cc705aca-e6ee-4996-2152-88d1c9cacb00/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Lena</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Clean and simple colorful glyph icons for your
+                  homescreen and app drawer</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='513982' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.ares' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/176eb348-ccdc-4492-6791-4f63c038dc00/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Ares</h4>
+                  <p>Colorful iOS-like squircle shaped icons for
+                  your home screen and app drawer</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='513982' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.ares' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/176eb348-ccdc-4492-6791-4f63c038dc00/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Ares</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Colorful iOS-like squircle shaped icons for your
+                  home screen and app drawer</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514261' href='https://play.google.com/store/apps/details?id=cs14.pixelperfect.iconpack.vera' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/64b44c93-fc39-4460-adc3-36fa6eceb100/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Vera</h4>
+                  <p>Shapeless vibrant icon pack for all
+                  personalization lovers</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514261' href='https://play.google.com/store/apps/details?id=cs14.pixelperfect.iconpack.vera' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/64b44c93-fc39-4460-adc3-36fa6eceb100/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Vera</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Shapeless vibrant icon pack for all
+                  personalization lovers</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514040' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.aresblack' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/9a8b3976-bed4-40c9-3ad7-dc90fce66a00/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Ares Black</h4>
+                  <p>Colorful glyphs over the black squircle
+                  background for your homescreen</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514040' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.aresblack' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/9a8b3976-bed4-40c9-3ad7-dc90fce66a00/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Ares Black</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Colorful glyphs over the black squircle
+                  background for your homescreen</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514043' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.areslight' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/a3c532eb-dee1-4b49-04a9-08d3e4153000/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Ares Light</h4>
+                  <p>Light, squircle-shaped icons for your
+                  homescreen and app drawer</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514043' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.areslight' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/a3c532eb-dee1-4b49-04a9-08d3e4153000/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Ares Light</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Light, squircle-shaped icons for your homescreen
+                  and app drawer</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514260' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.lenawhite' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/c6ed68af-732f-4d99-c89f-31eefecffe00/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Lena White</h4>
+                  <p>Beautiful white shapeless icons for homescreen
+                  and app drawer</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514260' href='https://play.google.com/store/apps/details?id=one4studio.iconpack.lenawhite' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/c6ed68af-732f-4d99-c89f-31eefecffe00/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Lena White</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Beautiful white shapeless icons for homescreen
+                  and app drawer</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='623203' href='https://play.google.com/store/apps/dev?id=7550572979310204381' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/24179b98-cd89-4128-3a66-324c5259f400/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Check out all of my apps on Google Play</h4>
+                  <p>Best Android personalization apps!</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='623203' href='https://play.google.com/store/apps/dev?id=7550572979310204381' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/24179b98-cd89-4128-3a66-324c5259f400/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Check out all of my apps
+                  on Google Play</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Best Android personalization apps!</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Discover
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 class='pl-2 pt-3 font-weight-medium2 folder-title'>
+          Gumroad Wallpapers</h3>
+          <div class='row mb-4 mt-2 links-slider-main'>
+            <div class='links-slider'>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514114' href='https://vukandric.gumroad.com/l/scenery' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/ckt60aiqd14em6emuwwok05fwnj8/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Scenery</h4>
+                  <p>80 high-quality wallpapers, ready for iOS and
+                  Android devices. 10 free samples.</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514114' href='https://vukandric.gumroad.com/l/scenery' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/ckt60aiqd14em6emuwwok05fwnj8/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Scenery</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  80 high-quality wallpapers, ready for iOS and
+                  Android devices. 10 free samples.</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514115' href='https://vukandric.gumroad.com/l/ultima' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/x2ahnmpboudw6u3tq04m843xh1fe/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Ultima</h4>
+                  <p>120 high-quality wallpapers, ready for iOS and
+                  Android devices. 20 free samples</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514115' href='https://vukandric.gumroad.com/l/ultima' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/x2ahnmpboudw6u3tq04m843xh1fe/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Ultima</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  120 high-quality wallpapers, ready for iOS and
+                  Android devices. 20 free samples</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514167' href='https://vukandric.gumroad.com/l/badazz' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/ijid9bc4qtzb5x3mzmh6yup9m3qy/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Badazz</h4>
+                  <p>115 high-quality wallpapers of badass animals
+                  and humans.</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514167' href='https://vukandric.gumroad.com/l/badazz' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/ijid9bc4qtzb5x3mzmh6yup9m3qy/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Badazz</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  115 high-quality wallpapers of badass animals and
+                  humans.</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514165' href='https://vukandric.gumroad.com/l/areswallpapers' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/y2mxijkuxmf4nmow0tio0198d9ko/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Ares</h4>
+                  <p>80 high-quality gradient wallpapers (40 light
+                  and 40 dark variants), ready to be applied to
+                  your lockscreen or homescreen.</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514165' href='https://vukandric.gumroad.com/l/areswallpapers' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/y2mxijkuxmf4nmow0tio0198d9ko/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Ares</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  80 high-quality gradient wallpapers (40 light and
+                  40 dark variants), ready to be applied to your
+                  lockscreen or homescreen.</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='514168' href='https://vukandric.gumroad.com/l/animals2' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/mi4mneoo73f5ko2p5kgjj9arjpao/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>Animals 2.0</h4>
+                  <p>100 high-quality wallpapers of animals, ready
+                  for iOS depth effect.</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='514168' href='https://vukandric.gumroad.com/l/animals2' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://public-files.gumroad.com/variants/mi4mneoo73f5ko2p5kgjj9arjpao/baaca0eb0e33dc4f9d45910b8c86623f0144cea0fe0c2093c546d17d535752eb&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>Animals 2.0</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  100 high-quality wallpapers of animals, ready for
+                  iOS depth effect.</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Download
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+              <div class='single-link-block d-sm-none d-none d-xl-block d-lg-block d-md-block mt-0'>
+                <a data-link-url='623207' href='https://vukandric.gumroad.com/' target='_blank'>
+                <div class='single-link-block-img'>
+                  <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/b256cf51-8a25-4455-bf77-8481fb7ea700/public&apos;)'>
+                  </div>
+                </div>
+                <div class='single-link-block-details'>
+                  <h4>More collections on Gumroad</h4>
+                  <p>Discover wallpapers, icon packs and widgets
+                  for iOS and Android.</p>
+                </div>
+                <div class='single-link-block-arrow'>
+                  <svg fill='none' height='19' viewbox='0 0 24 23' width='19' xmlns='http://www.w3.org/2000/svg'>
+                  <rect fill='white' height='2.73809' rx='1.36904' transform='rotate(-90 20.3594 18.6191)' width='18.619' x='20.3594' y='18.6191'/>
+                  <rect fill='white' height='3.2857' rx='1.64285' width='18.619' x='4.47852'/>
+                  <rect fill='white' height='3.03407' rx='1.51704' transform='rotate(135 22.4639 2.68164)' width='28.7345' x='22.4639' y='2.68164'/></svg>
+                </div></a>
+              </div>
+              <div class='d-xl-none d-lg-none d-md-none d-sm-block d-block link-card' data-link-id='14545'>
+                <div style='width: 260px'>
+                  <a class='btn btn-block btn-primary link-btn link-btn-rounded' data-link-url='623207' href='https://vukandric.gumroad.com/' style='background: white;color: black' target='_blank'>
+                  <div class='link-btn-image-wrapper link-btn-rounded'/>
+                  <div class='link-img-div'>
+                    <div class='link-btn-image' style='background-image: url(&apos;https://imagedelivery.net/tqC70bVt8T6GtQUXNsa2-g/b256cf51-8a25-4455-bf77-8481fb7ea700/public&apos;)'>
+                    </div>
+                  </div>
+                  <h4 class='link-title'>More collections on
+                  Gumroad</h4>
+                  <p class='link-description link-description-child-link text-muted'>
+                  Discover wallpapers, icon packs and widgets for
+                  iOS and Android.</p>
+                  <div class='div-block-342'>
+                    <div class='text-block-20'>
+                      Discover
+                    </div>
+                  </div></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+ </div>
+    
+  <!---[ </body> close]-->
+ </body>
+</html>
